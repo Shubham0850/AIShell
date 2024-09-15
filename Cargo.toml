@@ -1,15 +1,14 @@
 [package]
-name = "ai_terminal"
+name = "ai_shell"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 iced = { version = "0.12.1", features = ["canvas", "tokio"]}
-image = "0.25.2"
 
 [package.metadata.bundle]
 name = "AIshell"
-identifier = "com.example.ai_terminal"
+identifier = "com.example.ai_shell"
 icon = ["resources/AppIcon.icns"]
 version = "0.1.0"
 
