@@ -4,6 +4,24 @@
 
 AI Shell is a simple GUI-based terminal application built with Rust 🦀 and the [iced](https://github.com/iced-rs/iced) ❄️ GUI library. It allows users to enter shell commands 💻 and view the output within a graphical interface 🖥️.
 
+## Why Rust ?
+Here's an updated table focusing on the **Size** aspect, incorporating typical application sizes:
+
+| **Aspect**  | **Rust**                                               | **C++**                                              | **Go**                                               | **Python (PyInstaller)**                             | **Java (JAR files)**                                 | **Electron (JavaScript)**                            |
+|-------------|--------------------------------------------------------|------------------------------------------------------|------------------------------------------------------|------------------------------------------------------|------------------------------------------------------|------------------------------------------------------|
+| **Size**    | - **~8.3 MB** (as in your app)<br>- Produces small, standalone binaries without large runtimes | - ~10-15 MB<br>- Can produce small binaries but may require manual optimization | - ~10-20 MB<br>- Includes garbage collector, slight overhead | - ~20-30 MB<br>- Requires bundling interpreter and libraries | - ~50-100 MB<br>- Requires JVM, adds overhead | - ~50-150 MB<br>- Includes Chromium and Node.js runtime, leading to large sizes |
+
+**Key Takeaways:**
+
+- **Rust's Small Binary Size:** Your 8.3MB application showcases Rust's efficiency in producing compact binaries, which is especially beneficial for distribution, faster downloads, and reduced storage requirements.
+  
+- **Comparison with Other Frameworks:**
+  - **Python:** Applications bundled with tools like PyInstaller often exceed 20 MB because they need to include the Python interpreter and all dependencies.
+  - **Java:** Java applications require the Java Virtual Machine (JVM), adding significant overhead and increasing the overall size.
+  - **Electron:** Apps built with Electron can easily exceed 50 MB because they bundle a Chromium browser and Node.js runtime.
+
+- **No Need for Large Runtimes:** Rust compiles directly to machine code, eliminating the need for a virtual machine or interpreter at runtime, which contributes to smaller application sizes.
+
 ## Features ✨
 
 - **Command Execution**: Enter shell commands 💻 and view their output in a scrollable window 📜.
