@@ -2,10 +2,8 @@ mod executor;
 
 use iced::alignment::{Alignment, Horizontal, Vertical};
 use iced::theme::Theme;
-use iced::widget::{button, column, container, row, scrollable, text, text_input};
-use iced::{Application, Command, Element, Length, Settings};
-use iced::window;
-use iced::window::icon;
+use iced::widget::{column, container, row, scrollable, text, text_input};
+use iced::{Application, Command, Element, Length, Settings, Font};
 use std::time::{Duration, Instant};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -46,14 +44,17 @@ impl Application for GuiShell {
                 command_history: Vec::new(),
                 splash_duration: Duration::from_secs(3),
                 splash_start_time: Some(Instant::now()),
-                // splash_image: iced::widget::image::Handle::from_memory(include_bytes!("../resources/splash.png").as_ref()),
             },
             Command::perform(async {}, |_| Message::SplashTimeout),
         )
     }
 
     fn title(&self) -> String {
-        String::from("AI Terminal")
+        String::from("AI Shell")
+    }
+
+    fn theme(&self) -> Self::Theme {
+        Theme::Dark
     }
 
     fn update(&mut self, message: Message) -> Command<Message> {
@@ -84,7 +85,8 @@ impl Application for GuiShell {
                         let output = executor::execute_command(&command);
 
                         // Update the output log
-                        self.output_log.push_str(&format!("> {}\n{}\n", command, output));
+                        self.output_log
+                            .push_str(&format!("> {}\n{}\n", command, output));
 
                         // Clear the input field
                         self.input_value.clear();
@@ -100,30 +102,17 @@ impl Application for GuiShell {
             AppState::Splash => {
                 // Display the splash screen
                 container(
-                    text("Welcome to AI Terminal!")
+                    text("Welcome to AI Shell!")
                         .size(40)
+                        .font(Font::MONOSPACE)
                         .horizontal_alignment(Horizontal::Center)
-                        .vertical_alignment(Vertical::Center),
+                        .vertical_alignment(Vertical::Center)
                 )
                 .width(Length::Fill)
                 .height(Length::Fill)
                 .center_x()
                 .center_y()
                 .into()
-
-                // If using an image:
-                /*
-                container(
-                    image(&self.splash_image)
-                        .width(Length::Units(400))
-                        .height(Length::Units(400)),
-                )
-                .width(Length::Fill)
-                .height(Length::Fill)
-                .center_x()
-                .center_y()
-                .into()
-                */
             }
             AppState::Main => self.main_view(),
         }
@@ -136,29 +125,20 @@ impl GuiShell {
         let input = text_input("Enter command...", &self.input_value)
             .padding(10)
             .size(16)
+            .font(Font::MONOSPACE)
             .on_input(Message::InputChanged)
             .on_submit(Message::SubmitPressed)
             .width(Length::FillPortion(3));
 
-        // Create the submit button
-        let submit_button = button("Run")
-            .on_press(Message::SubmitPressed)
-            .padding(10)
-            .width(Length::Shrink);
-
         // Arrange input field and button horizontally
-        let input_row = row![input, submit_button]
+        let input_row = row![input]
             .spacing(10)
             .align_items(Alignment::Center)
             .width(Length::Fill);
 
         // Create the output display area
-        let output = scrollable(
-            text(&self.output_log)
-                .size(14)
-                .width(Length::Fill),
-        )
-        .height(Length::Fill);
+        let output =
+            scrollable(text(&self.output_log).size(14).width(Length::Fill).font(Font::MONOSPACE)).height(Length::Fill);
 
         // Arrange everything vertically
         let content = column![output, input_row]
@@ -176,33 +156,5 @@ impl GuiShell {
 }
 
 fn main() -> iced::Result {
-    // Load the icon image from the resources directory
-    // let icon_bytes = include_bytes!("../resources/icon.png");
-
-    // // Decode the image using the `image` crate
-    // let image = image::load_from_memory(icon_bytes).expect("Failed to load icon image");
-
-    // // Convert the image to RGBA8 format
-    // let image = image.to_rgba8();
-
-    // // Get the dimensions of the image
-    // let (width, height) = image.dimensions();
-
-    // // Get the raw RGBA pixel data
-    // let pixels = image.into_raw();
-
-    // // Create the window icon
-    // let icon = icon::from_rgba(pixels, width, height).expect("Failed to create icon");
-
-    // // Run the application with the window icon set
-    // GuiShell::run(Settings {
-    //     window: window::Settings {
-    //         icon: Some(icon),
-    //         ..window::Settings::default()
-    //     },
-    //     ..Settings::default()
-    // })
-
-     // If not setting the icon programmatically:
-     GuiShell::run(Settings::default())
+    GuiShell::run(Settings::default())
 }
